@@ -57,6 +57,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @ApiNoContentResponse()
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
