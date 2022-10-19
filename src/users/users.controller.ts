@@ -29,8 +29,8 @@ export class UsersController {
     description: 'The record has been successfully created.',
     type: UserDto,
   })
-  create(@Body() createUserDto: CreateUserDto): UserDto {
-    const user = this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
+    const user = await this.usersService.create(createUserDto);
     return new UserDto(user);
   }
 
@@ -39,8 +39,8 @@ export class UsersController {
     description: 'List of users',
     type: [UserDto],
   })
-  findAll(): UserDto[] {
-    const users = this.usersService.findAll();
+  async findAll(): Promise<UserDto[]> {
+    const users = await this.usersService.findAll();
     return users.map((user) => new UserDto(user));
   }
 
@@ -52,12 +52,12 @@ export class UsersController {
   @ApiNotFoundResponse({
     description: 'User not found',
   })
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<UserDto> {
+    const user = await this.usersService.findOne(+id);
+    return new UserDto(user);
   }
 
   @Patch(':id')
-  @ApiNoContentResponse()
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }

@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 type UserProperties = Required<User>;
 export enum State {
@@ -19,10 +25,16 @@ export class User {
   public firstName?: string;
   @Column()
   public lastName?: string;
+  @Column({
+    type: 'enum',
+    enum: State,
+    default: State.ACTIVE,
+  })
+  public state: State = State.ACTIVE;
   @Column()
-  public state?: string;
-  public createdAt?: Date;
-  public updatedAt?: Date;
+  public createdAt: Date = new Date();
+  @Column()
+  public updatedAt: Date = new Date();
 
   public static fromProperties(value: UserProperties): User {
     const user = new User();

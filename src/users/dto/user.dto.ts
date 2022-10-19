@@ -30,7 +30,7 @@ export class UserDto {
     this.email = value.email ?? '';
     this.firstName = value.firstName ?? '';
     this.lastName = value.lastName ?? '';
-    this.state = value.state ?? '';
+    this.state = value.state ?? State.ACTIVE;
     this.createdAt = value.createdAt ?? new Date();
     this.updatedAt = value.updatedAt ?? new Date();
   }
