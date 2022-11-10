@@ -23,8 +23,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
+import { BasicAuthGuard } from './auth/basic-auth.guard';
+
 @Controller('users')
 @ApiTags('users')
+@UseGuards(BasicAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
