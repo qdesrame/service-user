@@ -23,27 +23,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
-import { LocalAuthGuard } from './auth/local-auth.guard';
-import { Request } from 'express';
-import { User } from './entities/user.entity';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { JwtUser } from './auth/jwt.strategy';
 @Controller('users')
 @ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post('login')
-  @UseGuards(LocalAuthGuard)
-  async login(@Req() req: Request): Promise<any> {
-    return this.usersService.login(req.user as User);
-  }
-
-  @Get('login')
-  @UseGuards(JwtAuthGuard)
-  async getLoggedIn(@Req() req: Request): Promise<any> {
-    return this.usersService.findOne((req.user as JwtUser).id);
-  }
 
   @Post()
   @ApiCreatedResponse({

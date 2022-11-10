@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { MessagesModule } from './messages/messages.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MessagesModule } from './messages/messages.module';
     UsersModule,
     MongooseModule.forRoot('mongodb://127.0.0.1:27017/messaging'),
     MessagesModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

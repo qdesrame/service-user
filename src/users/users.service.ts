@@ -4,28 +4,19 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ListFilter } from './entities/filters.entity';
-import { User, State } from './entities/user.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private jwtService: JwtService,
   ) {}
-
-  async login(user: User) {
-    const payload = { username: user.email, sub: `${user.id}` };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const loginUsers = await this.findAll({ login: createUserDto.login });
