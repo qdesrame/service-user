@@ -8,6 +8,8 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { jwtConstants } from './auth/constants';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -19,6 +21,12 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [UsersController],
-  providers: [UsersService, LocalStrategy, LocalAuthGuard],
+  providers: [
+    UsersService,
+    LocalStrategy,
+    LocalAuthGuard,
+    JwtStrategy,
+    JwtAuthGuard,
+  ],
 })
 export class UsersModule {}
