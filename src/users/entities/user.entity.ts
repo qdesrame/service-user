@@ -17,9 +17,13 @@ export class User {
   @PrimaryGeneratedColumn()
   public id?: number;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   public login?: string;
-  @Column()
+  @Column({
+    unique: true,
+  })
   public email?: string;
   @Column()
   public firstName?: string;

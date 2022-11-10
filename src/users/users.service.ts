@@ -1,8 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ListFilter } from './entities/filters.entity';
 import { User, State } from './entities/user.entity';
 
 @Injectable()
@@ -12,7 +17,18 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const loginUsers = await this.findAll({ login: createUserDto.login });
+    if (loginUsers.length > 0) {
+      throw new ConflictException('existing login');
+    }
+    const emailUser = await this.usersRepository.findOneBy({
+      email: createUserDto.email,
+    });
+    if (emailUser != null) {
+      throw new ConflictException('existing email');
+    }
+
     return this.usersRepository.save({
       ...createUserDto,
       createdAt: new Date(),
@@ -20,8 +36,8 @@ export class UsersService {
     });
   }
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  findAll(filter: ListFilter): Promise<User[]> {
+    return this.usersRepository.findBy(filter);
   }
 
   async findOne(id: number): Promise<User> {
@@ -32,11 +48,20 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<void> {
+    const result = await this.usersRepository.update(id, {
+      ...updateUserDto,
+      updatedAt: new Date(),
+    });
+    if (result.affected == 0) {
+      throw new NotFoundException('user not found');
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<void> {
+    const result = await this.usersRepository.delete(id);
+    if (result.affected == 0) {
+      throw new NotFoundException('user not found');
+    }
   }
 }
