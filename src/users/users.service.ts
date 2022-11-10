@@ -1,8 +1,8 @@
 import {
   ConflictException,
   Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+  NotFoundException, UnauthorizedException
+} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -44,6 +44,17 @@ export class UsersService {
     const user = await this.usersRepository.findOneById(id);
     if (user == null) {
       throw new NotFoundException('user not found');
+    }
+    return user;
+  }
+
+  async findByLogin(login: string, password: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({
+      login,
+      password,
+    });
+    if (user == null) {
+        throw new UnauthorizedException('wrong login or password')
     }
     return user;
   }

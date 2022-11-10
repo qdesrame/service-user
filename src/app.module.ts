@@ -8,7 +8,6 @@ import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
-    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '127.0.0.1',
@@ -19,6 +18,7 @@ import { MessagesModule } from './messages/messages.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    UsersModule,
     MongooseModule.forRoot('mongodb://127.0.0.1:27017/messaging'),
     MessagesModule,
   ],

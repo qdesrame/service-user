@@ -20,6 +20,8 @@ export class UserDto {
   @ApiProperty({ enum: State })
   state: string;
   @ApiProperty()
+  password: string;
+  @ApiProperty()
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;
@@ -28,6 +30,7 @@ export class UserDto {
     this.id = value.id ?? 0;
     this.login = value.login ?? '';
     this.email = value.email ?? '';
+    this.password = value.password ?? '';
     this.firstName = value.firstName ?? '';
     this.lastName = value.lastName ?? '';
     this.state = value.state ?? State.ACTIVE;

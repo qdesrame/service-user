@@ -29,6 +29,8 @@ export class User {
   public firstName?: string;
   @Column()
   public lastName?: string;
+  @Column()
+  public password?: string;
   @Column({
     type: 'enum',
     enum: State,

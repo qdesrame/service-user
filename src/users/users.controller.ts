@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
+    Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,11 +23,20 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
-
+import { LocalAuthGuard } from './auth/local-auth.guard';
+import {Request} from 'express'
 @Controller('users')
 @ApiTags('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+  ) {}
+
+  @Post('login')
+  @UseGuards(LocalAuthGuard)
+  async login(@Req() req: Request): Promise<any> {
+    return req.user;
+  }
 
   @Post()
   @ApiCreatedResponse({
